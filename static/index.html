@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tactile-Text-Vision Multimodal Reasoning System</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1><i class="fas fa-brain"></i> Multimodal Reasoning System</h1>
+            <p>Interactive Web-Based Application for Tactile-Text-Vision Multimodal Reasoning Using GPT</p>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="tab-nav">
+            <button class="tab-btn active" data-tab="multimodal">
+                <i class="fas fa-layer-group"></i> Multimodal Analysis
+            </button>
+            <button class="tab-btn" data-tab="qa">
+                <i class="fas fa-question-circle"></i> Question Answering
+            </button>
+            <button class="tab-btn" data-tab="few-shot">
+                <i class="fas fa-graduation-cap"></i> Few-Shot Learning
+            </button>
+            <button class="tab-btn" data-tab="templates">
+                <i class="fas fa-code"></i> Prompt Templates
+            </button>
+        </nav>
+
+        <!-- Multimodal Analysis Tab -->
+        <div id="multimodal" class="tab-content active">
+            <div class="section-header">
+                <h2><i class="fas fa-layer-group"></i> Multimodal Analysis</h2>
+                <p>Combine tactile, visual, and textual inputs for comprehensive analysis</p>
+            </div>
+
+            <div class="analysis-modes">
+                <div class="mode-selector">
+                    <button class="mode-btn active" data-mode="tactile-text">
+                        <i class="fas fa-hand-paper"></i><i class="fas fa-file-text"></i>
+                        Tactile + Text
+                    </button>
+                    <button class="mode-btn" data-mode="vision-text">
+                        <i class="fas fa-eye"></i><i class="fas fa-file-text"></i>
+                        Vision + Text
+                    </button>
+                    <button class="mode-btn" data-mode="complete">
+                        <i class="fas fa-layer-group"></i>
+                        All Modalities
+                    </button>
+                </div>
+
+                <!-- Tactile + Text Mode -->
+                <div id="tactile-text-mode" class="analysis-form active">
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label for="tactile-data"><i class="fas fa-hand-paper"></i> Tactile Data</label>
+                            <textarea id="tactile-data" placeholder="Describe tactile properties (e.g., smooth, metallic, high friction, coarse surface...)"></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label for="task-instruction"><i class="fas fa-tasks"></i> Task Instruction</label>
+                            <textarea id="task-instruction" placeholder="Specify what analysis you want (e.g., identify material, predict use case, describe texture...)"></textarea>
+                        </div>
+                    </div>
+                    <div class="prompt-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="use-custom-prompt">
+                            <span>Use Custom Prompt</span>
+                        </label>
+                        <div id="custom-prompt-section" class="hidden">
+                            <textarea id="custom-prompt" placeholder="Enter your custom prompt here..."></textarea>
+                        </div>
+                    </div>
+                    <button class="analyze-btn" onclick="analyzeTactileText()">
+                        <i class="fas fa-play"></i> Analyze
+                    </button>
+                </div>
+
+                <!-- Vision + Text Mode -->
+                <div id="vision-text-mode" class="analysis-form">
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label for="image-upload"><i class="fas fa-image"></i> Upload Image</label>
+                            <div class="file-upload-area" onclick="document.getElementById('image-file').click()">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Click to upload image or drag & drop</p>
+                                <span id="image-filename"></span>
+                            </div>
+                            <input type="file" id="image-file" accept="image/*" style="display:none">
+                        </div>
+                        <div class="input-group">
+                            <label for="text-description"><i class="fas fa-file-text"></i> Text Description</label>
+                            <textarea id="text-description" placeholder="Provide textual context or description..."></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label for="vision-task"><i class="fas fa-tasks"></i> Task Instruction</label>
+                            <textarea id="vision-task" placeholder="Specify what analysis you want..."></textarea>
+                        </div>
+                    </div>
+                    <button class="analyze-btn" onclick="analyzeVisionText()">
+                        <i class="fas fa-play"></i> Analyze
+                    </button>
+                </div>
+
+                <!-- Complete Multimodal Mode -->
+                <div id="complete-mode" class="analysis-form">
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label for="complete-tactile"><i class="fas fa-hand-paper"></i> Tactile Data</label>
+                            <textarea id="complete-tactile" placeholder="Describe tactile properties..."></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label for="complete-image"><i class="fas fa-image"></i> Upload Image</label>
+                            <div class="file-upload-area" onclick="document.getElementById('complete-image-file').click()">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Click to upload image</p>
+                                <span id="complete-image-filename"></span>
+                            </div>
+                            <input type="file" id="complete-image-file" accept="image/*" style="display:none">
+                        </div>
+                        <div class="input-group">
+                            <label for="complete-text"><i class="fas fa-file-text"></i> Text Description</label>
+                            <textarea id="complete-text" placeholder="Provide textual context..."></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label for="complete-task"><i class="fas fa-tasks"></i> Task Instruction</label>
+                            <textarea id="complete-task" placeholder="Specify comprehensive analysis requirements..."></textarea>
+                        </div>
+                    </div>
+                    <button class="analyze-btn" onclick="analyzeComplete()">
+                        <i class="fas fa-play"></i> Comprehensive Analysis
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="analysis-results" class="results-section hidden">
+                <h3><i class="fas fa-chart-line"></i> Analysis Results</h3>
+                <div class="result-content">
+                    <div class="result-text" id="result-text"></div>
+                    <div class="result-meta">
+                        <div class="prompt-used">
+                            <h4>Prompt Used:</h4>
+                            <pre id="prompt-display"></pre>
+                        </div>
+                        <div class="model-info">
+                            <h4>Model Information:</h4>
+                            <pre id="model-info-display"></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question Answering Tab -->
+        <div id="qa" class="tab-content">
+            <div class="section-header">
+                <h2><i class="fas fa-question-circle"></i> Question Answering</h2>
+                <p>Ask questions about multimodal data</p>
+            </div>
+
+            <div class="qa-modes">
+                <div class="mode-selector">
+                    <button class="mode-btn active" data-mode="single-qa">Single Modality</button>
+                    <button class="mode-btn" data-mode="dual-qa">Dual Modality</button>
+                    <button class="mode-btn" data-mode="multi-qa">All Modalities</button>
+                    <button class="mode-btn" data-mode="batch-qa">Batch Questions</button>
+                </div>
+
+                <!-- Single Modality QA -->
+                <div id="single-qa-mode" class="qa-form active">
+                    <div class="input-group">
+                        <label for="qa-question"><i class="fas fa-question"></i> Question</label>
+                        <textarea id="qa-question" placeholder="Ask a question about the data..."></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label for="modality-type">Modality Type</label>
+                        <select id="modality-type">
+                            <option value="tactile">Tactile</option>
+                            <option value="vision">Vision</option>
+                            <option value="text">Text</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="modality-data">Data</label>
+                        <textarea id="modality-data" placeholder="Enter the data for the selected modality..."></textarea>
+                    </div>
+                    <button class="analyze-btn" onclick="askSingleModalityQuestion()">
+                        <i class="fas fa-search"></i> Ask Question
+                    </button>
+                </div>
+
+                <!-- Dual Modality QA -->
+                <div id="dual-qa-mode" class="qa-form">
+                    <div class="input-group">
+                        <label for="dual-question"><i class="fas fa-question"></i> Question</label>
+                        <textarea id="dual-question" placeholder="Ask a question using multiple modalities..."></textarea>
+                    </div>
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label for="dual-tactile">Tactile Data (Optional)</label>
+                            <textarea id="dual-tactile" placeholder="Tactile information..."></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label for="dual-text">Text Data (Optional)</label>
+                            <textarea id="dual-text" placeholder="Text information..."></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label for="dual-image">Image (Optional)</label>
+                            <div class="file-upload-area" onclick="document.getElementById('dual-image-file').click()">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Click to upload image</p>
+                                <span id="dual-image-filename"></span>
+                            </div>
+                            <input type="file" id="dual-image-file" accept="image/*" style="display:none">
+                        </div>
+                    </div>
+                    <button class="analyze-btn" onclick="askDualModalityQuestion()">
+                        <i class="fas fa-search"></i> Ask Question
+                    </button>
+                </div>
+
+                <!-- Sample Questions -->
+                <div class="sample-questions">
+                    <h4><i class="fas fa-lightbulb"></i> Sample Questions</h4>
+                    <div class="question-examples" id="question-examples">
+                        <button class="example-btn" onclick="loadSampleQuestions()">Load Sample Questions</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QA Results -->
+            <div id="qa-results" class="results-section hidden">
+                <h3><i class="fas fa-comment-alt"></i> Answer</h3>
+                <div class="qa-result-content">
+                    <div class="answer-text" id="answer-text"></div>
+                    <div class="qa-meta">
+                        <div class="modalities-used">
+                            <strong>Modalities Used:</strong> <span id="modalities-used"></span>
+                        </div>
+                        <div class="original-question">
+                            <strong>Question:</strong> <span id="original-question"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Few-Shot Learning Tab -->
+        <div id="few-shot" class="tab-content">
+            <div class="section-header">
+                <h2><i class="fas fa-graduation-cap"></i> Few-Shot Learning</h2>
+                <p>Learn from examples to analyze new data</p>
+            </div>
+
+            <div class="few-shot-form">
+                <div class="examples-section">
+                    <h3><i class="fas fa-list"></i> Training Examples</h3>
+                    <div id="examples-container">
+                        <div class="example-item">
+                            <h4>Example 1</h4>
+                            <div class="input-grid">
+                                <div class="input-group">
+                                    <label>Tactile Data</label>
+                                    <textarea class="example-tactile" placeholder="Example tactile data..."></textarea>
+                                </div>
+                                <div class="input-group">
+                                    <label>Text Context</label>
+                                    <textarea class="example-text" placeholder="Example text..."></textarea>
+                                </div>
+                                <div class="input-group">
+                                    <label>Expected Output</label>
+                                    <textarea class="example-output" placeholder="Expected analysis result..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="add-example-btn" onclick="addExample()">
+                        <i class="fas fa-plus"></i> Add Example
+                    </button>
+                </div>
+
+                <div class="new-input-section">
+                    <h3><i class="fas fa-play"></i> New Input to Analyze</h3>
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label for="new-tactile">Tactile Data</label>
+                            <textarea id="new-tactile" placeholder="New tactile data to analyze..."></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label for="new-text">Text Description</label>
+                            <textarea id="new-text" placeholder="New text description..."></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label for="new-image">Image (Optional)</label>
+                            <div class="file-upload-area" onclick="document.getElementById('new-image-file').click()">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Click to upload image</p>
+                                <span id="new-image-filename"></span>
+                            </div>
+                            <input type="file" id="new-image-file" accept="image/*" style="display:none">
+                        </div>
+                    </div>
+                    <button class="analyze-btn" onclick="performFewShotLearning()">
+                        <i class="fas fa-magic"></i> Analyze with Few-Shot Learning
+                    </button>
+                </div>
+            </div>
+
+            <!-- Few-Shot Results -->
+            <div id="few-shot-results" class="results-section hidden">
+                <h3><i class="fas fa-star"></i> Few-Shot Analysis Results</h3>
+                <div class="result-content">
+                    <div class="result-text" id="few-shot-result-text"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prompt Templates Tab -->
+        <div id="templates" class="tab-content">
+            <div class="section-header">
+                <h2><i class="fas fa-code"></i> Prompt Templates</h2>
+                <p>Manage and customize prompt templates</p>
+            </div>
+
+            <div class="templates-section">
+                <div class="available-templates">
+                    <h3><i class="fas fa-list"></i> Available Templates</h3>
+                    <div id="templates-list">
+                        <button class="load-templates-btn" onclick="loadAvailableTemplates()">
+                            <i class="fas fa-download"></i> Load Available Templates
+                        </button>
+                    </div>
+                </div>
+
+                <div class="custom-template">
+                    <h3><i class="fas fa-plus"></i> Create Custom Template</h3>
+                    <div class="input-group">
+                        <label for="template-name">Template Name</label>
+                        <input type="text" id="template-name" placeholder="Enter template name...">
+                    </div>
+                    <div class="input-group">
+                        <label for="template-content">Template Content</label>
+                        <textarea id="template-content" placeholder="Enter template with placeholders like {tactile_data}, {text_description}, etc."></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label for="required-inputs">Required Inputs (JSON array)</label>
+                        <textarea id="required-inputs" placeholder='["tactile_data", "text_description", "task_instruction"]'></textarea>
+                    </div>
+                    <button class="analyze-btn" onclick="createCustomTemplate()">
+                        <i class="fas fa-save"></i> Save Template
+                    </button>
+                </div>
+            </div>
+
+            <!-- Model Information -->
+            <div class="model-info-section">
+                <h3><i class="fas fa-info-circle"></i> Model Information</h3>
+                <div id="model-status">
+                    <button class="load-model-info-btn" onclick="loadModelInfo()">
+                        <i class="fas fa-sync"></i> Load Model Information
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="loading-overlay" class="loading-overlay hidden">
+            <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Processing your request...</p>
+            </div>
+        </div>
+
+        <!-- Error/Success Messages -->
+        <div id="message-container" class="message-container"></div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html> 
